@@ -19,7 +19,7 @@ fun DiagnosticsScreen(viewModel: ChatViewModel) {
         Card(modifier = Modifier.fillMaxWidth()) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text("Model ID: Qwen/Qwen3-4B")
-                Text("Personal Key: dev_***84fd")
+                Text("Personal Key: YOUR_MLANGE_KEY")
                 Spacer(Modifier.height(16.dp))
                 Text("Last Generation:")
                 Text("Time: ${duration} ms")
