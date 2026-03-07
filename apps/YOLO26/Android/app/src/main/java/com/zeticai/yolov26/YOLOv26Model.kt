@@ -32,7 +32,7 @@ class YOLOv26Model(context: Context) {
 
     init {
         // Load Model Asynchronously
-        // "dev_d786c1fd7f2848acb9b0bf8060aa10b2", "Team_ZETIC/YOLOv26"
+        // "YOUR_MLANGE_KEY", "Team_ZETIC/YOLOv26"
         loadModel(context)
     }
 

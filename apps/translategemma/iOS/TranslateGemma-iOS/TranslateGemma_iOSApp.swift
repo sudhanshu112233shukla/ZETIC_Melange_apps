@@ -29,8 +29,8 @@ class TranslateGemmaModelManager: ObservableObject {
     
     private var model: ZeticMLangeLLMModel?
     // Using the ID and Key from the user's snippet
-    private let modelId = "yeonseok_zeticai_ceo/translate-gemma-4b-it"
-    private let projectKey = "dev_182c82785ecd42369394fbd2721484fd"
+    private let modelId = "YOUR_MODEL_ID"
+    private let projectKey = "YOUR_MLANGE_KEY"
     
     init() {
         load()
