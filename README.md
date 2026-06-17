@@ -111,6 +111,7 @@ cd ZETIC_Melange_apps
 | **Face Detection** | [**MediaPipe BlazeFace**](apps/MediaPipe-Face-Detection) | Ultra-fast face detection optimized for short-range selfie cameras. | [**View**](https://mlange.zetic.ai/p/google/MediaPipe-Face-Detection?from=use-cases) |
 | **Emotion Analysis** | [**Emo-AffectNet**](apps/FaceEmotionRecognition) | Real-time facial emotion recognition. | [**View**](https://mlange.zetic.ai/p/ElenaRyumina/FaceEmotionRecognition?from=use-cases) |
 | **Speech Recognition** | [**Whisper Tiny**](apps/whisper-tiny) | High-accuracy automatic speech recognition (ASR) completely offline. | [**View**](https://mlange.zetic.ai/p/OpenAI/whisper-tiny-decoder?from=use-cases) |
+| **Private AI Notepad** | [**Gemma 4 E2B**](apps/Brew-AI-Notes) | On-Device AI Meeting Notes powered by Gemma. Granola, Pocket alternative. Private by design.  | [**View**](https://melange.zetic.ai/p/changgeun/gemma-4-E2B-it?from=use-cases) |
 
 <br/>
 
