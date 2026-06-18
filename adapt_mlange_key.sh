@@ -29,5 +29,9 @@ find apps -name "*.java" -print0 | xargs -0 perl -0777 -i -pe 's/(ZeticMLangeMod
 find apps -name "*.kt" -print0 | xargs -0 perl -i -pe 's/(MLANGE_PERSONAL_ACCESS_TOKEN\s*=\s*)"[^"]*"/${1}"'"$NEW_KEY"'"/g'
 # Update tokenKey variable pattern
 find apps -name "*.kt" -print0 | xargs -0 perl -i -pe 's/(val\s+tokenKey\s*=\s*)"[^"]*"/${1}"'"$NEW_KEY"'"/g'
+# Update personalKey pattern (Qwen3Chat + Brew-AI-Notes Android). Matches the
+# assignment/named-arg only — never the PLACEHOLDER_KEY constant used to detect
+# an unconfigured key.
+find apps -name "*.kt" -print0 | xargs -0 perl -i -pe 's/(personalKey\s*=\s*)"[^"]*"/${1}"'"$NEW_KEY"'"/g'
 
 echo "Key update complete!"
