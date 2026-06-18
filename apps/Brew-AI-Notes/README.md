@@ -9,10 +9,18 @@
 
 </div>
 
+<div align="center">
+
+| | |
+|:---:|:---:|
+| <img src="res/brew-main.png" width="240" alt="Brew Main"> | <img src="res/brew-note.png" width="240" alt="Brew Note"> |
+
+</div>
+
 > [!TIP]
 > **View on Melange Dashboard**: [changgeun/gemma-4-E2B-it](https://mlange.zetic.ai/p/changgeun/gemma-4-E2B-it)
 
-Brew records your meetings, transcribes them on-device with Apple's Speech framework, and uses an on-device **Gemma** model (via **Melange**) to turn the raw transcript into a clean, structured note — then lets you **Ask Anything** about it in a chat. Audio, transcription, and AI generation all run locally; nothing leaves the device.
+Brew records your meetings, transcribes them on-device, and uses an on-device **Gemma** model (via **Melange**) to turn the raw transcript into a clean, structured note — then lets you **Ask Anything** about it in a chat. Audio, transcription, and AI generation all run locally; nothing leaves the device.
 
 ## 🚀 Quick Start
 
@@ -29,7 +37,7 @@ Get up and running in minutes:
    - **iOS**: Open `iOS/` in Xcode and run on a physical device
 
 > [!NOTE]
-> The Gemma model only runs on **physical devices** (it uses the Neural Engine via Melange). On the **iOS Simulator** the app falls back to a built-in `StubLLMEngine`, so the UI is fully navigable but does not perform real inference.
+> The Gemma model only runs on **physical devices** (it uses the NPU via Melange). On the **iOS Simulator** the app falls back to a built-in `StubLLMEngine`, so the UI stays navigable without real inference.
 
 ## 📚 Resources
 
@@ -86,11 +94,11 @@ Brew-AI-Notes/
 
 ### Inference Process
 
-1. **Engine Selection**: `LLMService` picks `ZeticLLMEngine` (real Melange) on device and `StubLLMEngine` in the Simulator, funneling all access through one serial queue so the single generation context is never used concurrently.
-2. **Download Handling**: The app surfaces real model download progress (`downloading`) and an indeterminate `preparing` state during weight loading/compilation.
-3. **Transcription**: `SpeechTranscriber` runs Apple's on-device speech recognition (English or Korean) over the captured audio.
-4. **Prompt Building**: `Prompts` builds enhance / title / chat prompts, trimming overlong transcripts to fit the context budget.
-5. **Token Streaming**: Tokens stream from `model.waitForNextToken()` back to the UI as an `AsyncThrowingStream`.
+1. **Single Owner**: `LLMService` funnels all engine access through one serial executor/queue so the single generation context is never used concurrently. (iOS additionally swaps in a `StubLLMEngine` on the Simulator.)
+2. **Download Handling**: The app surfaces real model download progress (`Downloading`) and an indeterminate `Preparing` state during weight loading/compilation.
+3. **Transcription**: The app runs Apple Speech over the recorded file.
+4. **Prompt Building**: `Prompts` builds enhance / title / chat prompts, trimming overlong transcripts to fit the context budget. The prompt templates and budgets are carefully tuned.
+5. **Token Streaming**: Tokens stream from `model.waitForNextToken()` back to the UI (an `AsyncThrowingStream` on iOS).
 
 ### Key Implementation Details
 
@@ -100,9 +108,9 @@ Brew-AI-Notes/
 
 ## 💡 Features
 
-- ✅ **On-Device Transcription**: Apple Speech recognition for English and Korean, fully offline.
+- ✅ **On-Device Transcription**: English and Korean speech recognition, fully offline (Apple Speech on iOS).
 - ✅ **AI Note Enhancement**: Gemma turns raw transcripts into clean, structured meeting notes with a generated title.
 - ✅ **Ask Anything**: Chat with the model about any note, with real-time token streaming.
 - ✅ **Private by Design**: Audio, transcript, and AI output never leave the device.
-- ✅ **Hardware Accelerated**: Fully optimized via Melange for the Mobile Neural Engine.
-- ✅ **Native iOS UI**: Built with SwiftUI and SwiftData persistence.
+- ✅ **Hardware Accelerated**: Fully optimized via Melange for the mobile NPU.
+- ✅ **Native UI**: SwiftUI + SwiftData on iOS.

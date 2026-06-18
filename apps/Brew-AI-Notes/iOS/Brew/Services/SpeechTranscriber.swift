@@ -35,6 +35,7 @@ enum TranscriptionLanguage: String, CaseIterable, Identifiable {
 enum TranscriptionError: LocalizedError {
     case notAuthorized
     case recognizerUnavailable
+    case onDeviceUnavailable
     case audioFileMissing
     case audioFileInvalid(String)
     case timedOut
@@ -46,6 +47,10 @@ enum TranscriptionError: LocalizedError {
             return "Speech recognition permission is not granted. Enable it in Settings."
         case .recognizerUnavailable:
             return "Speech recognition isn't available for this language right now."
+        case .onDeviceUnavailable:
+            return "On-device speech recognition isn't available for this language on this device. "
+                + "Brew transcribes entirely on-device, so this language can't be transcribed here. "
+                + "Try installing the language under Settings › General › Keyboard, or choose another language."
         case .audioFileMissing:
             return "The recording file could not be found."
         case .audioFileInvalid(let reason):
@@ -87,6 +92,12 @@ enum SpeechTranscriber {
         }
         guard let recognizer = SFSpeechRecognizer(locale: locale), recognizer.isAvailable else {
             throw TranscriptionError.recognizerUnavailable
+        }
+        // Brew transcribes fully on-device (see README); never fall back to
+        // Apple's server-backed recognition. If the locale has no on-device
+        // model installed, fail with a clear, actionable error instead.
+        guard recognizer.supportsOnDeviceRecognition else {
+            throw TranscriptionError.onDeviceUnavailable
         }
         guard FileManager.default.fileExists(atPath: fileURL.path) else {
             throw TranscriptionError.audioFileMissing
@@ -241,9 +252,10 @@ enum SpeechTranscriber {
     private static func runRecognition(url: URL, recognizer: SFSpeechRecognizer) async throws -> String {
         let request = SFSpeechURLRecognitionRequest(url: url)
         request.shouldReportPartialResults = false
-        // Prefer fully on-device; fall back to server when the language has no
-        // on-device model installed.
-        request.requiresOnDeviceRecognition = recognizer.supportsOnDeviceRecognition
+        // Force fully on-device recognition so no audio leaves the device.
+        // Locales without an on-device model are rejected up front in
+        // `transcribe(fileURL:locale:)`, so this is always supported here.
+        request.requiresOnDeviceRecognition = true
 
         let box = RecognitionBox()
         return try await withTaskCancellationHandler {

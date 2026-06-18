@@ -26,6 +26,12 @@ final class RecordingViewModel: ObservableObject {
     private var timer: Timer?
     private var startDate: Date?
     private var accumulated: TimeInterval = 0
+    /// Guards against re-entrant starts. `start()` awaits permission prompts,
+    /// so a fast double tap could otherwise launch two sessions and install a
+    /// second tap on the same AVAudioEngine input bus — which crashes. Both
+    /// flags are only ever read/written on the main actor.
+    private var isStarting = false
+    private var isRunning = false
 
     init() {
         self.language = TranscriptionLanguage.preferred
@@ -33,8 +39,15 @@ final class RecordingViewModel: ObservableObject {
         recorder.$recordingHealthy.assign(to: &$recordingHealthy)
     }
 
-    /// Requests permissions and begins capture. Returns false if denied.
+    /// Requests permissions and begins capture. Returns false if denied or if
+    /// a session is already starting/running (so rapid taps can't start twice).
     func start() async -> Bool {
+        // Set synchronously before the first `await` so a second call dispatched
+        // on the main actor sees the in-progress start and bails out.
+        guard !isStarting, !isRunning else { return false }
+        isStarting = true
+        defer { isStarting = false }
+
         // Pick up the language preference in case it was changed in Settings
         // since this view model was created.
         let preferred = TranscriptionLanguage.preferred
@@ -51,6 +64,7 @@ final class RecordingViewModel: ObservableObject {
             errorMessage = error.localizedDescription
             return false
         }
+        isRunning = true
         startDate = .now
         startTimer()
         return true
@@ -120,6 +134,7 @@ final class RecordingViewModel: ObservableObject {
         isPaused = false
         level = 0
         startDate = nil
+        isRunning = false
     }
 
     private func startTimer() {

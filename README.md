@@ -26,9 +26,9 @@ Automated conversion. Full NPU speed. Deployed in hours.
 [Quick Start](#-quick-start) • [Available Models](#-available-models) • [Documentation](https://docs.zetic.ai) • [Contribute](#-contributing)
 
 
-| | | | |
-|:---:|:---:|:---:|:---:|
-| <img src="res/screenshots/main_video0-1.gif" width="180" alt="Demo 1"> | <img src="res/screenshots/main_video1-1.gif" width="180" alt="Demo 2"> | <img src="res/screenshots/main_video2.gif" width="180" alt="Demo 3"> | <img src="res/screenshots/main_video3-1.gif" width="180" alt="Demo 4"> |
+| | | | | | |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+| <img src="res/screenshots/main_video0-1.gif" width="180" alt="Demo 1"> | <img src="res/screenshots/main_video1-1.gif" width="180" alt="Demo 2"> | <img src="res/screenshots/main_video2.gif" width="180" alt="Demo 3"> | <img src="res/screenshots/main_video3-1.gif" width="180" alt="Demo 4"> | <img src="apps/Brew-AI-Notes/res/brew-main.png" width="180" alt="Brew Main"> | <img src="apps/Brew-AI-Notes/res/brew-note.png" width="180" alt="Brew Note"> |
 
 </div>
 
